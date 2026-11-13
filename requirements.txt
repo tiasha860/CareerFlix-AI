@@ -1,0 +1,5 @@
+
+Flask
+sentence-transformers
+pypdf
+scikit-learn
