@@ -1,0 +1,1373 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerFlix | Explore Your Future</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --red: #e50914;
+            --black: #080808;
+            --card: #181818;
+            --muted: #b3b3b3;
+            --white: #ffffff;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--black);
+            color: var(--white);
+            font-family: Arial, Helvetica, sans-serif;
+            overflow-x: hidden;
+        }
+
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button, input {
+            font: inherit;
+        }
+
+        button:focus-visible,
+        a:focus-visible,
+        .career-poster:focus-visible {
+            outline: 2px solid #ff626b;
+            outline-offset: 3px;
+        }
+
+        /* NAVIGATION */
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 18px 5%;
+            background: rgba(0, 0, 0, 0.97);
+            border-bottom: 1px solid #252525;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 900;
+            letter-spacing: -1px;
+            white-space: nowrap;
+        }
+
+        .logo span {
+            color: var(--red);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            gap: 23px;
+        }
+
+        .nav-links a {
+            color: #eeeeee;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #ff414a;
+        }
+
+        .search-box {
+            width: 170px;
+            padding: 10px 12px;
+            background: #111111;
+            color: white;
+            border: 1px solid #555555;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        .search-box:focus {
+            border-color: white;
+        }
+
+        /* HERO BANNER */
+
+        .hero {
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            padding: 85px 5%;
+            position: relative;
+            background:
+                radial-gradient(
+                    ellipse at 78% 35%,
+                    rgba(229, 9, 20, 0.30),
+                    transparent 45%
+                ),
+                linear-gradient(
+                    90deg,
+                    #080808 5%,
+                    rgba(8, 8, 8, 0.84) 50%,
+                    rgba(8, 8, 8, 0.3)
+                ),
+                linear-gradient(
+                    135deg,
+                    #292929,
+                    #101010 55%,
+                    #43080d
+                );
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 120px;
+            background: linear-gradient(transparent, #080808);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 680px;
+        }
+
+        .hero-label {
+            color: #ff414a;
+            font-size: 13px;
+            font-weight: bold;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+
+        .hero h1 {
+            font-size: clamp(42px, 6vw, 74px);
+            font-weight: 900;
+            line-height: 1.07;
+            margin-bottom: 22px;
+        }
+
+        .hero h1 span {
+            color: var(--red);
+        }
+
+        .hero p {
+            max-width: 580px;
+            color: #dddddd;
+            font-size: 17px;
+            line-height: 1.8;
+            margin-bottom: 28px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 13px 22px;
+            background: var(--red);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .button:hover {
+            background: #b20710;
+            transform: translateY(-2px);
+        }
+
+        .button-white {
+            background: white;
+            color: black;
+        }
+
+        .button-white:hover {
+            background: #dddddd;
+        }
+
+        .button-grey {
+            background: #333333;
+            color: white;
+        }
+
+        .button-grey:hover {
+            background: #494949;
+        }
+
+        /* CONTENT SECTIONS */
+
+        .content {
+            position: relative;
+            z-index: 2;
+            margin-top: -28px;
+            padding-bottom: 45px;
+        }
+
+        .career-section {
+            margin: 25px 0 40px;
+            padding-left: 5%;
+        }
+
+        .section-heading {
+            font-size: 24px;
+            margin-bottom: 17px;
+        }
+
+        .section-subtitle {
+            color: #999999;
+            font-size: 14px;
+            font-weight: normal;
+            margin-left: 9px;
+        }
+
+        .section-description {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.7;
+            margin-top: -7px;
+            margin-bottom: 18px;
+        }
+
+        /* HORIZONTAL POSTER ROW */
+
+        .poster-row {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 10px 5% 25px 0;
+            scrollbar-width: thin;
+            scrollbar-color: #555555 transparent;
+        }
+
+        .poster-row::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .poster-row::-webkit-scrollbar-thumb {
+            background: #555555;
+            border-radius: 10px;
+        }
+
+        /* POSTER CARDS */
+
+        .poster {
+            flex: 0 0 220px;
+            height: 300px;
+            position: relative;
+            isolation: isolate;
+            overflow: hidden;
+            border-radius: 5px;
+            border: 1px solid #303030;
+            background: #181818;
+            transition:
+                transform 0.25s,
+                border-color 0.25s,
+                box-shadow 0.25s;
+        }
+
+        .career-poster {
+            cursor: pointer;
+        }
+
+        .poster:hover {
+            transform: scale(1.04);
+            border-color: var(--red);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.65);
+            z-index: 5;
+        }
+
+        .poster-art {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.15);
+            font-size: 61px;
+            font-weight: 900;
+            letter-spacing: -2px;
+            pointer-events: none;
+        }
+
+        .poster-art::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(0, 0, 0, 0.02) 5%,
+                rgba(0, 0, 0, 0.20) 35%,
+                rgba(0, 0, 0, 0.97) 100%
+            );
+        }
+
+        .art-blue {
+            background: linear-gradient(145deg, #073b4c, #118ab2, #061b2b);
+        }
+
+        .art-purple {
+            background: linear-gradient(145deg, #24104f, #713bd0, #130825);
+        }
+
+        .art-orange {
+            background: linear-gradient(145deg, #422006, #b45309, #1c1007);
+        }
+
+        .art-green {
+            background: linear-gradient(145deg, #064e3b, #059669, #022c22);
+        }
+
+        .art-red {
+            background: linear-gradient(145deg, #4a102a, #be123c, #1f0711);
+        }
+
+        .art-cyan {
+            background: linear-gradient(145deg, #164e63, #06b6d4, #083344);
+        }
+
+        .art-navy {
+            background: linear-gradient(145deg, #172554, #2563eb, #08102b);
+        }
+
+        .art-grey {
+            background: linear-gradient(145deg, #292524, #78716c, #171717);
+        }
+
+        .poster-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            z-index: 2;
+            padding: 6px 8px;
+            border-radius: 3px;
+            background: rgba(0, 0, 0, 0.65);
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            pointer-events: none;
+        }
+
+        .poster-info {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 2;
+            padding: 16px;
+            pointer-events: none;
+        }
+
+        .poster-tag {
+            display: inline-block;
+            color: #ff858c;
+            border: 1px solid #87333a;
+            border-radius: 3px;
+            padding: 4px 7px;
+            margin-bottom: 9px;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .poster-info h3 {
+            font-size: 19px;
+            line-height: 1.3;
+            margin-bottom: 8px;
+        }
+
+        .poster-info p {
+            color: #d0d0d0;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .poster-action {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 8px 12px;
+            border-radius: 3px;
+            background: var(--red);
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* KEEP HIDDEN CARDS HIDDEN DURING SEARCH */
+
+        .poster[hidden],
+        .career-section[hidden] {
+            display: none !important;
+        }
+
+        /* CONTINUE YOUR JOURNEY */
+
+        .tool-card {
+            flex: 0 0 255px;
+            min-height: 240px;
+            padding: 23px;
+            background: linear-gradient(145deg, #222222, #111111);
+            border: 1px solid #333333;
+            border-radius: 6px;
+            transition: transform 0.25s, border-color 0.25s;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--red);
+        }
+
+        .tool-icon {
+            width: 54px;
+            height: 54px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            background: #302044;
+            border-radius: 9px;
+            font-size: 27px;
+        }
+
+        .tool-card h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .tool-card p {
+            min-height: 45px;
+            color: #bdbdbd;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .tool-card .poster-action {
+            margin-top: 17px;
+        }
+
+        /* ONE CENTRAL JOBS SECTION */
+
+        .jobs-banner {
+            margin: 45px 5%;
+            padding: 34px;
+            border: 1px solid #3b2426;
+            border-radius: 7px;
+            background:
+                radial-gradient(
+                    ellipse at 90% 50%,
+                    rgba(229, 9, 20, 0.25),
+                    transparent 45%
+                ),
+                linear-gradient(115deg, #191919, #27090c);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 25px;
+        }
+
+        .jobs-banner h2 {
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+
+        .jobs-banner p {
+            max-width: 650px;
+            color: #c3c3c3;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        .jobs-banner .button {
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+
+        /* POPUP BACKDROP */
+
+        .career-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            padding: 20px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.88);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .career-modal.open {
+            display: flex;
+        }
+
+        .career-modal-content {
+            position: relative;
+            width: 100%;
+            max-width: 700px;
+            max-height: calc(100vh - 40px);
+            overflow-y: auto;
+            padding: 32px;
+            border: 1px solid #414141;
+            border-top: 4px solid var(--red);
+            border-radius: 8px;
+            background: #181818;
+            box-shadow: 0 20px 70px rgba(0, 0, 0, 0.85);
+            animation: popupIn 0.22s ease-out;
+        }
+
+        @keyframes popupIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px) scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .career-close {
+            position: absolute;
+            right: 16px;
+            top: 16px;
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 50%;
+            background: #333333;
+            color: white;
+            font-size: 26px;
+            cursor: pointer;
+        }
+
+        .career-close:hover {
+            background: var(--red);
+        }
+
+        .modal-category {
+            color: #ff5d67;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin: 8px 45px 12px 0;
+        }
+
+        .career-modal-content h2 {
+            font-size: 32px;
+            line-height: 1.25;
+            margin-bottom: 13px;
+            padding-right: 25px;
+        }
+
+        .modal-description {
+            color: #cccccc;
+            font-size: 15px;
+            line-height: 1.8;
+        }
+
+        .career-modal-content h3 {
+            font-size: 18px;
+            margin: 25px 0 13px;
+        }
+
+        .career-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+        }
+
+        .career-skills span {
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: 1px solid #424242;
+            background: #292929;
+            color: #eeeeee;
+            font-size: 13px;
+        }
+
+        .career-roadmap {
+            padding-left: 23px;
+            color: #dddddd;
+            line-height: 1.9;
+        }
+
+        .career-roadmap li {
+            padding-left: 4px;
+            margin-bottom: 5px;
+        }
+
+        .career-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        /* FOOTER */
+
+        footer {
+            padding: 30px 5%;
+            border-top: 1px solid #252525;
+            text-align: center;
+            color: #888888;
+            font-size: 13px;
+            line-height: 2;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 900px) {
+            .navbar {
+                padding: 16px 4%;
+            }
+
+            .nav-links {
+                gap: 14px;
+            }
+
+            .search-box {
+                width: 140px;
+            }
+
+            .poster {
+                flex-basis: 195px;
+                height: 280px;
+            }
+
+            .tool-card {
+                flex-basis: 230px;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .navbar {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .logo {
+                font-size: 28px;
+            }
+
+            .nav-links {
+                justify-content: flex-start;
+                gap: 13px;
+            }
+
+            .nav-links a {
+                font-size: 12px;
+            }
+
+            .search-box {
+                max-width: 190px;
+            }
+
+            .hero {
+                min-height: 530px;
+                padding: 130px 5% 85px;
+            }
+
+            .hero p {
+                font-size: 15px;
+            }
+
+            .section-heading {
+                font-size: 20px;
+            }
+
+            .section-subtitle {
+                display: block;
+                margin: 7px 0 0;
+            }
+
+            .poster {
+                flex-basis: 170px;
+                height: 255px;
+            }
+
+            .poster-info {
+                padding: 12px;
+            }
+
+            .poster-info h3 {
+                font-size: 16px;
+            }
+
+            .poster-art {
+                font-size: 47px;
+            }
+
+            .jobs-banner {
+                margin: 35px 4%;
+                padding: 25px;
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .jobs-banner h2 {
+                font-size: 23px;
+            }
+
+            .career-modal {
+                padding: 12px;
+            }
+
+            .career-modal-content {
+                max-height: calc(100vh - 24px);
+                padding: 25px 19px;
+            }
+
+            .career-modal-content h2 {
+                font-size: 25px;
+            }
+
+            .career-actions .button {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVIGATION -->
+
+    <header class="navbar">
+
+        <a href="/" class="logo">
+            Career<span>Flix</span>
+        </a>
+
+        <nav class="nav-links">
+            <a href="/">Home</a>
+            <a href="/resume">Resume</a>
+            <a href="/interview">Interview</a>
+            <a href="/progress">My Progress</a>
+            <a href="/jobs">Jobs</a>
+
+            <input
+                type="search"
+                id="careerSearch"
+                class="search-box"
+                placeholder="Search careers..."
+                aria-label="Search career cards"
+            >
+        </nav>
+
+    </header>
+
+    <!-- HERO BANNER -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <div class="hero-label">
+                CareerFlix Originals
+            </div>
+
+            <h1>
+                Find Your Path.<br>
+                <span>Own Your Story.</span>
+            </h1>
+
+            <p>
+                Every career has a story. Explore trending career paths,
+                discover new skills, prepare for interviews, and find
+                opportunities that can shape your future.
+            </p>
+
+            <div class="hero-buttons">
+
+                <a href="#trending" class="button button-white">
+                    ▶ Explore Careers
+                </a>
+
+                <a href="/jobs" class="button button-grey">
+                    Browse Jobs
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <main class="content">
+
+        <!-- TRENDING CAREER PATHS -->
+
+        <section class="career-section" id="trending">
+
+            <h2 class="section-heading">
+                Trending Career Paths
+                <span class="section-subtitle">Explore your next move</span>
+            </h2>
+
+            <p class="section-description">
+                Click a career to see its own skills and learning roadmap.
+            </p>
+
+            <div class="poster-row">
+
+                <article class="poster career-poster"
+                    data-career="software-engineer"
+                    data-search="software engineer programming coding"
+                    tabindex="0" role="button"
+                    aria-label="View Software Engineer details">
+
+                    <div class="poster-art art-blue">01</div>
+                    <div class="poster-badge">#1 TRENDING</div>
+
+                    <div class="poster-info">
+                        <span class="poster-tag">Technology</span>
+                        <h3>Software Engineer</h3>
+                        <p>Build products that power the future.</p>
+                        <span class="poster-action">Explore →</span>
+                    </div>
+                </article>
+
+                <article class="poster career-poster"
+                    data-career="ai-ml"
+                    data-search="AI artificial intelligence machine learning"
+                    tabindex="0" role="button"
+                    aria-label="View AI and Machine Learning details">
+
+                    <div class="poster-art art-purple">AI</div>
+                    <div class="poster-badge">POPULAR</div>
+
+                    <div class="poster-info">
+                        <span class="poster-tag">Innovation</span>
+                        <h3>AI &amp; Machine Learning</h3>
+                        <p>Turn ideas into intelligent solutions.</p>
+                        <span class="poster-action">Explore →</span>
+                    </div>
+                </article>
+
+                <article class="poster career-poster"
+                    data-career="data-science"
+                    data-search="data science data analyst analytics"
+                    tabindex="0" role="button"
+                    aria-label="View Data Science details">
+
+                    <div class="poster-art art-orange">DATA</div>
+                    <div class="poster-badge">TOP PICK</div>
+
+                    <div class="poster-info">
+                        <span class="poster-tag">Analytics</span>
+                        <h3>Data Science</h3>
+                        <p>Discover the stories hidden in data.</p>
+                        <span class="poster-action">Explore →</span>
+                    </div>
+                </article>
+
+                <article class="poster career-poster"
+                    data-career="cybersecurity"
+                    data-search="cybersecurity security ethical hacking"
+                    tabindex="0" role="button"
+                    aria-label="View Cybersecurity details">
+
+                    <div class="poster-art art-red">CY</div>
+                    <div class="poster-badge">IN DEMAND</div>
+
+                    <div class="poster-info">
+                        <span class="poster-tag">Security</span>
+                        <h3>Cybersecurity</h3>
+                        <p>Help protect the digital world.</p>
+                        <span class="poster-action">Explore →</span>
+                    </div>
+                </article>
+
+                <article class="poster career-poster"
+                    data-career="web-development"
+                    data-search="web development frontend backend websites"
+                    tabindex="0" role="button"
+                    aria-label="View Web Development details">
+
+                    <div class="poster-art art-green">WEB</div>
+                    <div class="poster-badge">POPULAR</div>
+
+                    <div class="poster-info">
+                        <span class="poster-tag">Development</span>
+                        <h3>Web Development</h3>
+                        <p>Create websites and digital experiences.</p>
+                        <span class="poster-action">Explore →</span>
+                    </div>
+                </article>
+
+                <article class="poster career-poster"
+                    data-career="cloud-computing"
+                    data-search="cloud computing cloud engineer AWS Azure"
+                    tabindex="0" role="button"
+                    aria-label="View Cloud Computing details">
+
+                    <div class="poster-art art-navy">CLOUD</div>
+                    <div class="poster-badge">EXPLORE</div>
+
+                    <div class="poster-info">
+                        <span class="poster-tag">Infrastructure</span>
+                        <h3>Cloud Computing</h3>
+                        <p>Build the foundation of modern apps.</p>
+                        <span class="poster-action">Explore →</span>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- CONTINUE YOUR JOURNEY -->
+
+        <section class="career-section">
+
+            <h2 class="section-heading">
+                Continue Your Journey
+                <span class="section-subtitle">Prepare for what's next</span>
+            </h2>
+
+            <div class="poster-row">
+
+                <a class="tool-card" href="/resume">
+
+                    <div class="tool-icon">📄</div>
+
+                    <h3>Resume Analyzer</h3>
+
+                    <p>
+                        Analyse your resume and discover skills to improve.
+                    </p>
+
+                    <span class="poster-action">Open Resume →</span>
+                </a>
+
+                <a class="tool-card" href="/interview">
+
+                    <div class="tool-icon">🎙️</div>
+
+                    <h3>Interview Practice</h3>
+
+                    <p>
+                        Practise technical questions and HR interview answers.
+                    </p>
+
+                    <span class="poster-action">Start Practice →</span>
+                </a>
+
+                <a class="tool-card" href="/progress">
+
+                    <div class="tool-icon">📊</div>
+
+                    <h3>Track Progress</h3>
+
+                    <p>
+                        Visit your progress page to review your preparation.
+                    </p>
+
+                    <span class="poster-action">View Progress →</span>
+                </a>
+
+            </div>
+        </section>
+
+        <!-- ALL JOBS IN ONE PLACE -->
+
+        <section class="jobs-banner" id="jobs">
+
+            <div>
+
+                <h2>Jobs &amp; Applications</h2>
+
+                <p>
+                    Explore the available career catalogue and upload
+                    your resume to discover roles that match your skills.
+                    All job browsing and resume-based recommendations
+                    are available in one place.
+                </p>
+
+            </div>
+
+            <a href="/jobs" class="button">
+                Explore All Jobs →
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- CAREER DETAILS POPUP -->
+
+    <div class="career-modal"
+         id="careerModal"
+         aria-hidden="true">
+
+        <div class="career-modal-content"
+             role="dialog"
+             aria-modal="true"
+             aria-labelledby="careerTitle">
+
+            <button type="button"
+                    class="career-close"
+                    id="careerClose"
+                    aria-label="Close career details">
+                &times;
+            </button>
+
+            <p class="modal-category" id="careerCategory">
+                CAREER PATH
+            </p>
+
+            <h2 id="careerTitle">Career Title</h2>
+
+            <p class="modal-description" id="careerDescription"></p>
+
+            <h3>Skills to Learn</h3>
+
+            <div class="career-skills" id="careerSkills"></div>
+
+            <h3>Suggested Learning Roadmap</h3>
+
+            <ol class="career-roadmap" id="careerRoadmap"></ol>
+
+            <div class="career-actions">
+
+                <a href="/jobs" class="button">
+                    Explore Jobs →
+                </a>
+
+                <a href="/interview" class="button button-grey">
+                    Practise Interview →
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+
+    <footer>
+        <p>CareerFlix</p>
+        <p>Explore • Learn • Practise • Grow</p>
+        <p>© 2026 CareerFlix. Your future, your story.</p>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+        /* INDIVIDUAL CAREER INFORMATION */
+
+        const careerDetails = {
+            "software-engineer": {
+                title: "Software Engineer",
+                category: "SOFTWARE & TECHNOLOGY",
+                description:
+                    "Design, develop, test and maintain software applications. " +
+                    "Software engineers solve programming problems and build " +
+                    "useful digital products.",
+                skills: [
+                    "Python or Java",
+                    "Data Structures",
+                    "Algorithms",
+                    "Git & GitHub",
+                    "SQL",
+                    "Problem Solving"
+                ],
+                roadmap: [
+                    "Learn programming fundamentals in Python, Java or C++.",
+                    "Practise data structures and algorithms.",
+                    "Build projects and learn Git and GitHub.",
+                    "Study databases and software testing basics.",
+                    "Prepare for technical interviews."
+                ]
+            },
+
+            "ai-ml": {
+                title: "AI & Machine Learning",
+                category: "ARTIFICIAL INTELLIGENCE",
+                description:
+                    "Build applications that use data and machine learning " +
+                    "models to recognise patterns, make predictions and " +
+                    "solve practical problems.",
+                skills: [
+                    "Python",
+                    "Statistics",
+                    "NumPy",
+                    "Pandas",
+                    "Machine Learning",
+                    "Scikit-learn"
+                ],
+                roadmap: [
+                    "Learn Python and basic mathematics.",
+                    "Study statistics and data handling.",
+                    "Practise machine learning algorithms.",
+                    "Build small prediction and classification projects.",
+                    "Learn to evaluate model results."
+                ]
+            },
+
+            "data-science": {
+                title: "Data Science",
+                category: "DATA & ANALYTICS",
+                description:
+                    "Analyse data, discover patterns and communicate insights " +
+                    "that help answer business and research questions.",
+                skills: [
+                    "Python",
+                    "SQL",
+                    "Statistics",
+                    "Pandas",
+                    "NumPy",
+                    "Data Visualisation"
+                ],
+                roadmap: [
+                    "Learn Python, SQL and statistics.",
+                    "Practise cleaning and analysing datasets.",
+                    "Create charts and visualisations.",
+                    "Complete projects with real-world datasets.",
+                    "Present your findings in a portfolio."
+                ]
+            },
+
+            "cybersecurity": {
+                title: "Cybersecurity",
+                category: "SECURITY",
+                description:
+                    "Help protect computer systems, applications and networks " +
+                    "by identifying weaknesses and responding to security risks.",
+                skills: [
+                    "Networking",
+                    "Linux",
+                    "Python",
+                    "Security Fundamentals",
+                    "Web Security",
+                    "Log Analysis"
+                ],
+                roadmap: [
+                    "Learn networking and operating-system fundamentals.",
+                    "Practise Linux and Python.",
+                    "Study security in authorised lab environments.",
+                    "Learn defensive monitoring and incident response.",
+                    "Complete security projects."
+                ]
+            },
+
+            "web-development": {
+                title: "Web Development",
+                category: "WEB & APPLICATIONS",
+                description:
+                    "Create responsive websites and web applications, from " +
+                    "user-facing interfaces to server-side features.",
+                skills: [
+                    "HTML",
+                    "CSS",
+                    "JavaScript",
+                    "React",
+                    "APIs",
+                    "Git"
+                ],
+                roadmap: [
+                    "Learn HTML and CSS.",
+                    "Practise JavaScript and responsive design.",
+                    "Build interactive webpages.",
+                    "Learn APIs and backend fundamentals.",
+                    "Create and publish projects."
+                ]
+            },
+
+            "cloud-computing": {
+                title: "Cloud Computing",
+                category: "CLOUD & INFRASTRUCTURE",
+                description:
+                    "Work with cloud platforms and infrastructure used to " +
+                    "run, store and manage modern applications.",
+                skills: [
+                    "Linux",
+                    "Networking",
+                    "AWS or Azure",
+                    "Docker",
+                    "Git",
+                    "Cloud Fundamentals"
+                ],
+                roadmap: [
+                    "Learn networking and Linux basics.",
+                    "Understand cloud services and deployment.",
+                    "Practise introductory AWS or Azure services.",
+                    "Deploy a small application.",
+                    "Learn monitoring and cloud security basics."
+                ]
+            }
+        };
+
+        /* CAREER POPUP */
+
+        const careerModal = document.getElementById("careerModal");
+        const careerClose = document.getElementById("careerClose");
+
+        let previousFocus = null;
+
+        function openCareerPopup(key) {
+            const career = careerDetails[key];
+
+            if (!career) {
+                return;
+            }
+
+            previousFocus = document.activeElement;
+
+            document.getElementById("careerCategory").textContent =
+                career.category;
+
+            document.getElementById("careerTitle").textContent =
+                career.title;
+
+            document.getElementById("careerDescription").textContent =
+                career.description;
+
+            const skillsContainer =
+                document.getElementById("careerSkills");
+
+            skillsContainer.replaceChildren();
+
+            career.skills.forEach(function(skill) {
+                const tag = document.createElement("span");
+                tag.textContent = skill;
+                skillsContainer.appendChild(tag);
+            });
+
+            const roadmapContainer =
+                document.getElementById("careerRoadmap");
+
+            roadmapContainer.replaceChildren();
+
+            career.roadmap.forEach(function(step) {
+                const item = document.createElement("li");
+                item.textContent = step;
+                roadmapContainer.appendChild(item);
+            });
+
+            careerModal.classList.add("open");
+            careerModal.setAttribute("aria-hidden", "false");
+            document.body.classList.add("modal-open");
+
+            careerClose.focus();
+        }
+
+        function closeCareerPopup() {
+            careerModal.classList.remove("open");
+            careerModal.setAttribute("aria-hidden", "true");
+            document.body.classList.remove("modal-open");
+
+            if (previousFocus) {
+                previousFocus.focus();
+            }
+        }
+
+        /* CLICKING A TRENDING CAREER OPENS ITS OWN DETAILS */
+
+        document.querySelectorAll("#trending .career-poster")
+            .forEach(function(card) {
+
+                card.addEventListener("click", function() {
+                    openCareerPopup(card.dataset.career);
+                });
+
+                card.addEventListener("keydown", function(event) {
+                    if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        openCareerPopup(card.dataset.career);
+                    }
+                });
+
+            });
+
+        /* CLOSE POPUP */
+
+        careerClose.addEventListener("click", closeCareerPopup);
+
+        careerModal.addEventListener("click", function(event) {
+            if (event.target === careerModal) {
+                closeCareerPopup();
+            }
+        });
+
+        document.addEventListener("keydown", function(event) {
+            if (
+                event.key === "Escape" &&
+                careerModal.classList.contains("open")
+            ) {
+                closeCareerPopup();
+            }
+        });
+
+        /* SEARCH TRENDING CAREER CARDS */
+
+        const searchInput = document.getElementById("careerSearch");
+        const trendingSection = document.getElementById("trending");
+
+        searchInput.addEventListener("input", function() {
+            const query = searchInput.value.toLowerCase().trim();
+            const cards = trendingSection.querySelectorAll(".career-poster");
+            let visibleCount = 0;
+
+            cards.forEach(function(card) {
+                const searchableText =
+                    card.innerText.toLowerCase() + " " +
+                    (card.dataset.search || "").toLowerCase();
+
+                const matches = searchableText.includes(query);
+
+                card.hidden = !matches;
+
+                if (matches) {
+                    visibleCount++;
+                }
+            });
+
+            const description =
+                trendingSection.querySelector(".section-description");
+
+            if (description) {
+                description.textContent = visibleCount
+                    ? "Click a career to see its own skills and learning roadmap."
+                    : "No matching career found. Try another search.";
+            }
+        });
+    </script>
+
+</body>
+</html>

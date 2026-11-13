@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+CareerFlix AI - Job Recommendations
+</title>
+
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+body {
+
+    background: #05080e;
+
+    color: white;
+
+    font-family: Arial, sans-serif;
+
+}
+
+
+.navbar {
+
+    min-height: 85px;
+
+    padding: 0 5%;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    background: #080c13;
+
+    border-bottom:
+        1px solid #202938;
+
+}
+
+
+.logo {
+
+    font-size: 31px;
+
+    font-weight: bold;
+
+}
+
+
+.logo span {
+
+    color: #ff3048;
+
+}
+
+
+.ai {
+
+    font-size: 11px;
+
+    background: #29245c;
+
+    color: #d7d1ff;
+
+    padding: 5px 8px;
+
+    border-radius: 10px;
+
+    margin-left: 5px;
+
+}
+
+
+.nav-links {
+
+    display: flex;
+
+    gap: 28px;
+
+}
+
+
+.nav-links a {
+
+    color: #dce1e8;
+
+    text-decoration: none;
+
+}
+
+
+.nav-links a:hover {
+
+    color: #ff3048;
+
+}
+
+
+/* ==========================================
+   MAIN
+========================================== */
+
+
+.container {
+
+    width: 92%;
+
+    max-width: 1300px;
+
+    margin: auto;
+
+    padding: 45px 0 60px;
+
+}
+
+
+.heading {
+
+    margin-bottom: 35px;
+
+}
+
+
+.heading p {
+
+    color: #ff3048;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    letter-spacing: 3px;
+
+    margin-bottom: 12px;
+
+}
+
+
+.heading h1 {
+
+    font-size: 45px;
+
+    margin-bottom: 12px;
+
+}
+
+
+.heading h1 span {
+
+    color: #ff3048;
+
+}
+
+
+.description {
+
+    color: #9da9ba;
+
+    font-size: 17px;
+
+    line-height: 1.6;
+
+}
+
+
+/* ==========================================
+   AI SEARCH BOX
+========================================== */
+
+
+.search-box {
+
+    background: #101722;
+
+    border:
+        1px solid #293342;
+
+    border-radius: 16px;
+
+    padding: 28px;
+
+    margin-bottom: 30px;
+
+}
+
+
+.search-title {
+
+    font-size: 22px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.search-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        2fr 1fr 1fr auto;
+
+    gap: 14px;
+
+}
+
+
+input,
+select {
+
+    width: 100%;
+
+    padding: 14px;
+
+    background: #080e16;
+
+    color: white;
+
+    border:
+        1px solid #354154;
+
+    border-radius: 9px;
+
+    font-size: 15px;
+
+}
+
+
+input:focus,
+select:focus {
+
+    outline: none;
+
+    border-color: #ff3048;
+
+}
+
+
+.upload {
+
+    border:
+        1px dashed #4b5668;
+
+    padding: 12px;
+
+}
+
+
+.analyze-button {
+
+    padding: 14px 24px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background: #ff3048;
+
+    color: white;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+}
+
+
+.analyze-button:hover {
+
+    background: #e91e38;
+
+}
+
+
+/* ==========================================
+   SKILLS
+========================================== */
+
+
+.profile {
+
+    background: #101722;
+
+    border:
+        1px solid #293342;
+
+    border-radius: 16px;
+
+    padding: 22px;
+
+    margin-bottom: 30px;
+
+}
+
+
+.profile h3 {
+
+    margin-bottom: 15px;
+
+}
+
+
+.skill {
+
+    display: inline-block;
+
+    background: #29245c;
+
+    color: #d7d1ff;
+
+    padding: 7px 12px;
+
+    border-radius: 18px;
+
+    margin: 4px;
+
+    font-size: 13px;
+
+}
+
+
+/* ==========================================
+   RESULTS HEADER
+========================================== */
+
+
+.results-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 22px;
+
+}
+
+
+.results-header h2 {
+
+    font-size: 27px;
+
+}
+
+
+.results-count {
+
+    color: #9da9ba;
+
+}
+
+
+/* ==========================================
+   JOB GRID
+========================================== */
+
+
+.job-grid {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 25px;
+
+}
+
+
+.job-card {
+
+    background: #101722;
+
+    border:
+        1px solid #293342;
+
+    border-radius: 17px;
+
+    padding: 27px;
+
+    transition: 0.25s;
+
+}
+
+
+.job-card:hover {
+
+    transform: translateY(-4px);
+
+    border-color: #ff3048;
+
+    box-shadow:
+        0 12px 30px
+        rgba(255,48,72,0.12);
+
+}
+
+
+/* ==========================================
+   JOB TOP
+========================================== */
+
+
+.job-top {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: flex-start;
+
+    margin-bottom: 20px;
+
+}
+
+
+.company-logo {
+
+    width: 58px;
+
+    height: 58px;
+
+    border-radius: 14px;
+
+    background: #29245c;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 23px;
+
+    font-weight: bold;
+
+}
+
+
+.match {
+
+    padding: 7px 12px;
+
+    border-radius: 20px;
+
+    background: #173b2d;
+
+    color: #5ee7a1;
+
+    font-size: 14px;
+
+    font-weight: bold;
+
+}
+
+
+.job-card h2 {
+
+    font-size: 23px;
+
+    margin-bottom: 8px;
+
+}
+
+
+.category {
+
+    color: #ff3048;
+
+    font-weight: bold;
+
+    margin-bottom: 12px;
+
+}
+
+
+.description-job {
+
+    color: #aab5c6;
+
+    line-height: 1.6;
+
+    margin-bottom: 20px;
+
+}
+
+
+/* ==========================================
+   MATCHED SKILLS
+========================================== */
+
+
+.skills-title {
+
+    color: #dce1e8;
+
+    font-weight: bold;
+
+    margin-bottom: 7px;
+
+}
+
+
+.job-skill {
+
+    display: inline-block;
+
+    padding: 7px 10px;
+
+    margin: 4px;
+
+    border-radius: 15px;
+
+    font-size: 13px;
+
+    background: #1a2230;
+
+    color: #cbd3df;
+
+}
+
+
+.job-skill.matching {
+
+    background: #173b2d;
+
+    color: #5ee7a1;
+
+}
+
+
+/* ==========================================
+   WHY
+========================================== */
+
+
+.why {
+
+    background: #080e16;
+
+    border-left:
+        3px solid #ff3048;
+
+    padding: 15px;
+
+    color: #aab5c6;
+
+    line-height: 1.6;
+
+    margin-top: 20px;
+
+    margin-bottom: 20px;
+
+}
+
+
+.why strong {
+
+    color: white;
+
+}
+
+
+/* ==========================================
+   BUTTONS
+========================================== */
+
+
+.buttons {
+
+    display: flex;
+
+    gap: 10px;
+
+}
+
+
+.button {
+
+    flex: 1;
+
+    text-align: center;
+
+    padding: 13px;
+
+    border-radius: 9px;
+
+    text-decoration: none;
+
+    font-weight: bold;
+
+}
+
+
+.view {
+
+    background: #ff3048;
+
+    color: white;
+
+}
+
+
+.view:hover {
+
+    background: #e91e38;
+
+}
+
+
+.save {
+
+    background: #1a2230;
+
+    color: white;
+
+    border:
+        1px solid #354154;
+
+}
+
+
+.save:hover {
+
+    border-color: #ff3048;
+
+}
+
+
+/* ==========================================
+   ERROR
+========================================== */
+
+
+.error {
+
+    background: #401c23;
+
+    border:
+        1px solid #71313d;
+
+    color: #ff8997;
+
+    padding: 17px;
+
+    border-radius: 10px;
+
+    margin-bottom: 25px;
+
+}
+
+
+/* ==========================================
+   EMPTY
+========================================== */
+
+
+.empty {
+
+    text-align: center;
+
+    padding: 60px 20px;
+
+    color: #9da9ba;
+
+    background: #101722;
+
+    border:
+        1px solid #293342;
+
+    border-radius: 16px;
+
+}
+
+
+.empty h2 {
+
+    color: white;
+
+    margin-bottom: 10px;
+
+}
+
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+
+@media (max-width: 1000px) {
+
+    .search-grid {
+
+        grid-template-columns:
+            1fr 1fr;
+
+    }
+
+    .job-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .navbar {
+
+        padding: 20px;
+
+        flex-direction: column;
+
+        gap: 18px;
+
+    }
+
+    .nav-links {
+
+        flex-wrap: wrap;
+
+        justify-content: center;
+
+    }
+
+    .search-grid {
+
+        grid-template-columns:
+            1fr;
+
+    }
+
+    .heading h1 {
+
+        font-size: 35px;
+
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- ==========================================
+     NAVBAR
+========================================== -->
+
+
+<header class="navbar">
+
+
+<div class="logo">
+
+Career<span>Flix</span>
+
+<small class="ai">
+AI
+</small>
+
+</div>
+
+
+<nav class="nav-links">
+
+<a href="/">
+Home
+</a>
+
+<a href="/resume">
+Resume
+</a>
+
+<a href="/interview">
+Interview
+</a>
+
+<a href="/progress">
+Progress
+</a>
+
+<a href="/jobs">
+Jobs
+</a>
+
+</nav>
+
+
+</header>
+
+
+
+<!-- ==========================================
+     MAIN
+========================================== -->
+
+
+<main class="container">
+
+
+<div class="heading">
+
+<p>
+CAREERFLIX AI
+</p>
+
+
+<h1>
+
+Find Your
+<span>Next Opportunity.</span>
+
+</h1>
+
+
+<div class="description">
+
+Upload your resume and let CareerFlix AI
+find and rank career paths based on your
+skills and experience.
+
+</div>
+
+</div>
+
+
+
+<!-- ==========================================
+     SEARCH / ANALYSIS
+========================================== -->
+
+
+<div class="search-box">
+
+
+<div class="search-title">
+
+🤖 AI Job Recommendation Engine
+
+</div>
+
+
+<form
+action="/recommend-jobs"
+method="POST"
+enctype="multipart/form-data">
+
+
+<div class="search-grid">
+
+
+<input
+type="file"
+name="resume"
+accept=".pdf"
+class="upload"
+required
+>
+
+
+<input
+type="text"
+name="job_role"
+placeholder="Target role e.g. AI Engineer"
+value="{{ selected_role }}"
+>
+
+
+<select name="location">
+
+<option
+value="All"
+{% if selected_location == "All" %}
+selected
+{% endif %}
+>
+
+All Locations
+
+</option>
+
+<option
+value="Remote"
+{% if selected_location == "Remote" %}
+selected
+{% endif %}
+>
+
+Remote
+
+</option>
+
+<option
+value="Bangalore"
+{% if selected_location == "Bangalore" %}
+selected
+{% endif %}
+>
+
+Bangalore
+
+</option>
+
+<option
+value="Hyderabad"
+{% if selected_location == "Hyderabad" %}
+selected
+{% endif %}
+>
+
+Hyderabad
+
+</option>
+
+<option
+value="Pune"
+{% if selected_location == "Pune" %}
+selected
+{% endif %}
+>
+
+Pune
+
+</option>
+
+<option
+value="Delhi"
+{% if selected_location == "Delhi" %}
+selected
+{% endif %}
+>
+
+Delhi
+
+</option>
+
+<option
+value="Mumbai"
+{% if selected_location == "Mumbai" %}
+selected
+{% endif %}
+>
+
+Mumbai
+
+</option>
+
+</select>
+
+
+<button
+type="submit"
+class="analyze-button">
+
+Find Jobs →
+
+</button>
+
+
+</div>
+
+
+</form>
+
+
+</div>
+
+
+
+<!-- ==========================================
+     ERROR
+========================================== -->
+
+
+{% if error %}
+
+<div class="error">
+
+⚠️ {{ error }}
+
+</div>
+
+{% endif %}
+
+
+
+<!-- ==========================================
+     USER SKILLS
+========================================== -->
+
+
+{% if analyzed %}
+
+
+<div class="profile">
+
+
+<h3>
+
+🧠 Skills detected in your resume
+
+</h3>
+
+
+{% if user_skills %}
+
+
+{% for skill in user_skills %}
+
+<span class="skill">
+
+{{ skill }}
+
+</span>
+
+{% endfor %}
+
+
+{% else %}
+
+<p style="color:#9da9ba">
+
+No predefined skills were detected.
+Try adding more specific technical skills
+to your resume.
+
+</p>
+
+{% endif %}
+
+
+</div>
+
+
+{% endif %}
+
+
+
+<!-- ==========================================
+     RESULTS
+========================================== -->
+
+
+{% if jobs %}
+
+
+<div class="results-header">
+
+
+<h2>
+
+🎯 Recommended Career Opportunities
+
+</h2>
+
+
+<div class="results-count">
+
+{{ jobs|length }} opportunities found
+
+</div>
+
+
+</div>
+
+
+
+<section class="job-grid">
+
+
+{% for job in jobs %}
+
+
+<div class="job-card">
+
+
+<div class="job-top">
+
+
+<div class="company-logo">
+
+{{ job.role[0] }}
+
+</div>
+
+
+<div class="match">
+
+{{ job.match }}% Match
+
+</div>
+
+
+</div>
+
+
+
+<h2>
+
+{{ job.role }}
+
+</h2>
+
+
+<div class="category">
+
+{{ job.category }}
+
+</div>
+
+
+<p class="description-job">
+
+{{ job.description }}
+
+</p>
+
+
+
+<div class="skills-title">
+
+Required Skills
+
+</div>
+
+
+<div>
+
+
+{% for skill in job.skills %}
+
+
+<span
+class="job-skill
+{% if skill in job.matching_skills %}
+matching
+{% endif %}"
+>
+
+{{ skill }}
+
+</span>
+
+
+{% endfor %}
+
+
+</div>
+
+
+
+<div class="why">
+
+<strong>
+💡 Why CareerFlix recommends this:
+</strong>
+
+<br>
+
+{{ job.why }}
+
+</div>
+
+
+
+<div class="buttons">
+
+
+<a
+href="#"
+class="button view">
+
+Explore Role →
+
+</a>
+
+
+<a
+href="#"
+class="button save"
+onclick="saveJob(this)">
+
+♡ Save
+
+</a>
+
+
+</div>
+
+
+</div>
+
+
+{% endfor %}
+
+
+</section>
+
+
+{% elif analyzed %}
+
+
+<div class="empty">
+
+<h2>
+No recommendations found
+</h2>
+
+<p>
+
+Try changing your target role or
+adding more skills to your resume.
+
+</p>
+
+</div>
+
+
+{% else %}
+
+
+<div class="empty">
+
+<h2>
+🚀 Ready to Find Your Career Path?
+</h2>
+
+<p>
+
+Upload your PDF resume above and
+CareerFlix AI will analyze your skills
+and rank suitable career opportunities.
+
+</p>
+
+</div>
+
+
+{% endif %}
+
+
+</main>
+
+
+
+<script>
+
+
+function saveJob(button) {
+
+    event.preventDefault();
+
+
+    if (
+        button.innerText.includes("Saved")
+    ) {
+
+        button.innerText =
+            "♡ Save";
+
+        button.style.color =
+            "white";
+
+    }
+
+    else {
+
+        button.innerText =
+            "✓ Saved";
+
+        button.style.color =
+            "#5ee7a1";
+
+    }
+
+}
+
+</script>
+
+
+</body>
+
+</html>

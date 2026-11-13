@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview Studio | CareerFlix</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --red: #e50914;
+            --background: #080808;
+            --card: #181818;
+            --text: #ffffff;
+            --muted: #b3b3b3;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--background);
+            color: var(--text);
+            font-family: Arial, Helvetica, sans-serif;
+            overflow-x: hidden;
+        }
+
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button, select, textarea {
+            font: inherit;
+        }
+
+        button:focus-visible,
+        a:focus-visible,
+        .poster:focus-visible {
+            outline: 2px solid #ff5660;
+            outline-offset: 4px;
+        }
+
+        /* NAVIGATION BAR */
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            min-height: 76px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            padding: 18px 5%;
+            background: rgba(0, 0, 0, 0.97);
+            border-bottom: 1px solid #252525;
+        }
+
+        .logo {
+            color: white;
+            font-size: 30px;
+            font-weight: 900;
+            letter-spacing: -1px;
+            white-space: nowrap;
+        }
+
+        .logo span {
+            color: var(--red);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 22px;
+        }
+
+        .nav-links a {
+            color: #eeeeee;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #ff3945;
+        }
+
+        /* HERO BANNER */
+
+        .hero {
+            min-height: 440px;
+            padding: 65px 5%;
+            display: flex;
+            align-items: center;
+            background:
+                radial-gradient(
+                    ellipse at 78% 35%,
+                    rgba(229, 9, 20, 0.28),
+                    transparent 45%
+                ),
+                linear-gradient(
+                    90deg,
+                    #080808 5%,
+                    rgba(8, 8, 8, 0.82) 60%,
+                    rgba(8, 8, 8, 0.25)
+                ),
+                linear-gradient(
+                    135deg,
+                    #292929,
+                    #111111,
+                    #40070c
+                );
+        }
+
+        .hero-content {
+            max-width: 720px;
+        }
+
+        .eyebrow {
+            color: #ff414a;
+            font-size: 13px;
+            font-weight: bold;
+            letter-spacing: 4px;
+            margin-bottom: 18px;
+        }
+
+        .hero h1 {
+            font-size: clamp(40px, 5.5vw, 70px);
+            line-height: 1.08;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 span {
+            color: var(--red);
+        }
+
+        .hero p {
+            color: #dddddd;
+            font-size: 17px;
+            line-height: 1.7;
+            max-width: 590px;
+            margin-bottom: 26px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 13px 21px;
+            border: none;
+            border-radius: 4px;
+            background: var(--red);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .button:hover {
+            background: #b20710;
+            transform: scale(1.03);
+        }
+
+        .button-grey {
+            background: #333333;
+        }
+
+        .button-grey:hover {
+            background: #494949;
+        }
+
+        /* CAREER COLLECTIONS */
+
+        .section {
+            padding: 35px 0 5px 5%;
+        }
+
+        .section h2 {
+            font-size: 23px;
+            margin-bottom: 18px;
+        }
+
+        .section-description {
+            color: var(--muted);
+            font-size: 14px;
+            margin-top: -8px;
+            margin-bottom: 18px;
+            line-height: 1.6;
+        }
+
+        .poster-row {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 8px 5% 25px 0;
+            scrollbar-width: thin;
+            scrollbar-color: #555 transparent;
+        }
+
+        .poster-row::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .poster-row::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 10px;
+        }
+
+        /* CLICKABLE POSTER CARDS */
+
+        .poster {
+            flex: 0 0 220px;
+            height: 285px;
+            position: relative;
+            isolation: isolate;
+            overflow: hidden;
+            border-radius: 5px;
+            background: var(--card);
+            border: 1px solid #333333;
+            cursor: pointer;
+            transition:
+                transform 0.25s,
+                border-color 0.25s,
+                box-shadow 0.25s;
+        }
+
+        .poster:hover {
+            transform: scale(1.04);
+            border-color: var(--red);
+            box-shadow: 0 10px 28px rgba(229, 9, 20, 0.18);
+        }
+
+        .poster-art {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.17);
+            font-size: 60px;
+            font-weight: 900;
+            letter-spacing: -2px;
+            pointer-events: none;
+        }
+
+        .poster-art::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(0, 0, 0, 0.02) 5%,
+                rgba(0, 0, 0, 0.25) 35%,
+                #080808 100%
+            );
+        }
+
+        .blue {
+            background: linear-gradient(145deg, #073b4c, #118ab2, #061b2b);
+        }
+
+        .purple {
+            background: linear-gradient(145deg, #24104f, #7c3aed, #130825);
+        }
+
+        .orange {
+            background: linear-gradient(145deg, #422006, #b45309, #1c1007);
+        }
+
+        .green {
+            background: linear-gradient(145deg, #064e3b, #059669, #022c22);
+        }
+
+        .red {
+            background: linear-gradient(145deg, #4a102a, #be123c, #1f0711);
+        }
+
+        .cyan {
+            background: linear-gradient(145deg, #164e63, #06b6d4, #083344);
+        }
+
+        .navy {
+            background: linear-gradient(145deg, #172554, #2563eb, #08102b);
+        }
+
+        .grey {
+            background: linear-gradient(145deg, #292524, #78716c, #171717);
+        }
+
+        .poster-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            z-index: 2;
+            padding: 6px 8px;
+            background: rgba(0, 0, 0, 0.65);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            pointer-events: none;
+        }
+
+        .poster-info {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 2;
+            padding: 16px;
+            pointer-events: none;
+        }
+
+        .tag {
+            display: inline-block;
+            color: #ff858c;
+            border: 1px solid #87333a;
+            border-radius: 3px;
+            padding: 4px 7px;
+            margin-bottom: 9px;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .poster-info h3 {
+            font-size: 19px;
+            line-height: 1.3;
+            margin-bottom: 8px;
+        }
+
+        .poster-info p {
+            color: #d0d0d0;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .poster-hint {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 8px 12px;
+            border-radius: 3px;
+            background: var(--red);
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* PRACTICE POPUP BACKDROP */
+
+        .practice-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            padding: 24px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.88);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .practice-modal.open {
+            display: flex;
+        }
+
+        /* PRACTICE ROOM INSIDE POPUP */
+
+        .practice-section {
+            position: relative;
+            width: 100%;
+            max-width: 850px;
+            max-height: calc(100vh - 48px);
+            overflow-y: auto;
+            margin: 0;
+            padding: 32px;
+            background: #141414;
+            border: 1px solid #444444;
+            border-top: 3px solid var(--red);
+            border-radius: 8px;
+            box-shadow: 0 20px 70px rgba(0, 0, 0, 0.8);
+        }
+
+        .practice-section h2 {
+            font-size: 28px;
+            padding-right: 45px;
+            margin-bottom: 10px;
+        }
+
+        .practice-intro {
+            color: var(--muted);
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 38px;
+            height: 38px;
+            border: none;
+            border-radius: 50%;
+            background: #333333;
+            color: white;
+            font-size: 25px;
+            cursor: pointer;
+        }
+
+        .close-modal:hover {
+            background: var(--red);
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            margin: 20px 0 9px;
+        }
+
+        select,
+        textarea {
+            display: block;
+            width: 100%;
+            padding: 13px;
+            color: white;
+            background: #222222;
+            border: 1px solid #444444;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        select:focus,
+        textarea:focus {
+            border-color: var(--red);
+        }
+
+        textarea {
+            min-height: 170px;
+            line-height: 1.6;
+            resize: vertical;
+        }
+
+        .question-box {
+            margin: 22px 0;
+            padding: 23px;
+            background: #202020;
+            border-left: 4px solid var(--red);
+            border-radius: 4px;
+        }
+
+        .question-label {
+            color: #ff626b;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .question-text {
+            font-size: 21px;
+            line-height: 1.5;
+            font-weight: bold;
+        }
+
+        .question-count {
+            display: block;
+            color: #999999;
+            font-size: 12px;
+            margin-top: 12px;
+        }
+
+        .practice-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .feedback {
+            display: none;
+            margin-top: 22px;
+            padding: 22px;
+            background: #202020;
+            border-radius: 5px;
+            line-height: 1.7;
+        }
+
+        .feedback h3 {
+            color: #ff626b;
+            margin-bottom: 12px;
+        }
+
+        .feedback ul {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+
+        .feedback li {
+            margin-bottom: 7px;
+        }
+
+        .note {
+            color: #999999;
+            font-size: 12px;
+            line-height: 1.6;
+            margin-top: 16px;
+        }
+
+        /* FOOTER */
+
+        footer {
+            padding: 30px 5%;
+            text-align: center;
+            border-top: 1px solid #252525;
+            color: #888888;
+            font-size: 13px;
+            line-height: 2;
+        }
+
+        /* RESPONSIVE DESIGN */
+
+        @media (max-width: 750px) {
+            .navbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .nav-links {
+                gap: 15px;
+            }
+
+            .hero {
+                min-height: 390px;
+                padding: 45px 5%;
+            }
+
+            .hero p {
+                font-size: 15px;
+            }
+
+            .poster {
+                flex-basis: 180px;
+                height: 250px;
+            }
+
+            .practice-modal {
+                padding: 12px;
+            }
+
+            .practice-section {
+                max-height: calc(100vh - 24px);
+                padding: 23px 18px;
+            }
+
+            .practice-section h2 {
+                font-size: 23px;
+            }
+
+            .question-text {
+                font-size: 18px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .logo {
+                font-size: 27px;
+            }
+
+            .nav-links {
+                gap: 11px;
+            }
+
+            .nav-links a {
+                font-size: 12px;
+            }
+
+            .hero h1 {
+                font-size: 37px;
+            }
+
+            .poster {
+                flex-basis: 165px;
+            }
+
+            .practice-buttons .button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVIGATION BAR -->
+
+    <header class="navbar">
+
+        <a href="/" class="logo">
+            Career<span>Flix</span>
+        </a>
+
+        <nav class="nav-links">
+            <a href="/">Home</a>
+            <a href="/resume">Resume</a>
+            <a href="/interview" class="active">Interview</a>
+            <a href="/progress">My Progress</a>
+            <a href="/jobs">Careers</a>
+        </nav>
+
+    </header>
+
+    <!-- HERO BANNER -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <div class="eyebrow">
+                Your next chapter starts here
+            </div>
+
+            <h1>
+                Your Next Big<br>
+                <span>Interview Starts Here.</span>
+            </h1>
+
+            <p>
+                Practise unlimited technical, HR and Data Structures questions.
+                Explain concepts, solve coding problems, debug examples,
+                compare approaches and discuss real-world scenarios.
+            </p>
+
+            <div class="hero-buttons">
+
+                <button type="button"
+                        class="button"
+                        id="startPracticeButton">
+                    Start Practising →
+                </button>
+
+                <a href="#collections" class="button button-grey">
+                    Explore Topics
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <main>
+
+        <!-- INTERVIEW COLLECTIONS -->
+
+        <section class="section" id="collections">
+
+            <h2>Popular Interview Collections</h2>
+
+            <p class="section-description">
+                Click anywhere on a card to open its practice room.
+            </p>
+
+            <div class="poster-row">
+
+                <article class="poster"
+                         data-topic="DSA"
+                         tabindex="0"
+                         role="button"
+                         aria-label="Open Data Structures practice">
+
+                    <div class="poster-art blue">DSA</div>
+                    <div class="poster-badge">TECHNICAL</div>
+
+                    <div class="poster-info">
+                        <span class="tag">Problem Solving</span>
+                        <h3>Data Structures</h3>
+                        <p>Arrays, stacks, queues and algorithms.</p>
+                        <span class="poster-hint">Practise →</span>
+                    </div>
+
+                </article>
+
+                <article class="poster"
+                         data-topic="Python"
+                         tabindex="0"
+                         role="button"
+                         aria-label="Open Python practice">
+
+                    <div class="poster-art purple">Py</div>
+                    <div class="poster-badge">PROGRAMMING</div>
+
+                    <div class="poster-info">
+                        <span class="tag">Python</span>
+                        <h3>Python Interviews</h3>
+                        <p>Core concepts and coding questions.</p>
+                        <span class="poster-hint">Practise →</span>
+                    </div>
+
+                </article>
+
+                <article class="poster"
+                         data-topic="HR"
+                         tabindex="0"
+                         role="button"
+                         aria-label="Open HR practice">
+
+                    <div class="poster-art orange">HR</div>
+                    <div class="poster-badge">PERSONAL</div>
+
+                    <div class="poster-info">
+                        <span class="tag">Communication</span>
+                        <h3>HR Interviews</h3>
+                        <p>Share your experience and goals.</p>
+                        <span class="poster-hint">Practise →</span>
+                    </div>
+
+                </article>
+
+                <article class="poster"
+                         data-topic="DBMS"
+                         tabindex="0"
+                         role="button"
+                         aria-label="Open DBMS practice">
+
+                    <div class="poster-art green">DB</div>
+                    <div class="poster-badge">DATABASES</div>
+
+                    <div class="poster-info">
+                        <span class="tag">Technical</span>
+                        <h3>DBMS &amp; SQL</h3>
+                        <p>Database concepts and SQL fundamentals.</p>
+                        <span class="poster-hint">Practise →</span>
+                    </div>
+
+                </article>
+
+                <article class="poster"
+                         data-topic="Java"
+                         tabindex="0"
+                         role="button"
+                         aria-label="Open Java practice">
+
+                    <div class="poster-art red">J</div>
+                    <div class="poster-badge">PROGRAMMING</div>
+
+                    <div class="poster-info">
+                        <span class="tag">Java</span>
+                        <h3>Java Interviews</h3>
+                        <p>OOP, classes, objects and exceptions.</p>
+                        <span class="poster-hint">Practise →</span>
+                    </div>
+
+                </article>
+
+                <article class="poster"
+                         data-topic="Communication"
+                         tabindex="0"
+                         role="button"
+                         aria-label="Open Communication practice">
+
+                    <div class="poster-art cyan">COM</div>
+                    <div class="poster-badge">SOFT SKILLS</div>
+
+                    <div class="poster-info">
+                        <span class="tag">Communication</span>
+                        <h3>Speaking Skills</h3>
+                        <p>Practise clear and confident answers.</p>
+                        <span class="poster-hint">Practise →</span>
+                    </div>
+
+                </article>
+
+                <article class="poster"
+                         data-topic="AI"
+                         tabindex="0"
+                         role="button"
+                         aria-label="Open AI practice">
+
+                    <div class="poster-art navy">AI</div>
+                    <div class="poster-badge">TECHNOLOGY</div>
+
+                    <div class="poster-info">
+                        <span class="tag">Innovation</span>
+                        <h3>AI &amp; Machine Learning</h3>
+                        <p>Models, data and learning basics.</p>
+                        <span class="poster-hint">Practise →</span>
+                    </div>
+
+                </article>
+
+            </div>
+        </section>
+
+        <!-- QUICK QUESTIONS -->
+
+        <section class="section">
+
+            <h2>Before the Big Interview</h2>
+
+            <p class="section-description">
+                Prepare for common interview questions.
+            </p>
+
+            <div class="poster-row">
+
+                <article class="poster"
+                         data-topic="HR"
+                         data-question="0"
+                         tabindex="0"
+                         role="button"
+                         aria-label="Practise Tell Me About Yourself">
+
+                    <div class="poster-art red">01</div>
+
+                    <div class="poster-info">
+                        <span class="tag">First Impression</span>
+                        <h3>Tell Me About Yourself</h3>
+                        <p>Prepare your personal introduction.</p>
+                        <span class="poster-hint">Start →</span>
+                    </div>
+
+                </article>
+
+                <article class="poster"
+                         data-topic="DSA"
+                         tabindex="0"
+                         role="button"
+                         aria-label="Practise Technical Questions">
+
+                    <div class="poster-art blue">?</div>
+
+                    <div class="poster-info">
+                        <span class="tag">Problem Solving</span>
+                        <h3>Technical Questions</h3>
+                        <p>Practise explaining your reasoning.</p>
+                        <span class="poster-hint">Start →</span>
+                    </div>
+
+                </article>
+
+                <article class="poster"
+                         data-topic="HR"
+                         data-question="1"
+                         tabindex="0"
+                         role="button"
+                         aria-label="Practise Strengths and Weaknesses">
+
+                    <div class="poster-art purple">★</div>
+
+                    <div class="poster-info">
+                        <span class="tag">Confidence</span>
+                        <h3>Strengths &amp; Weaknesses</h3>
+                        <p>Prepare clear, thoughtful answers.</p>
+                        <span class="poster-hint">Start →</span>
+                    </div>
+
+                </article>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- PRACTICE POPUP -->
+
+    <div class="practice-modal"
+         id="practiceModal"
+         aria-hidden="true">
+
+        <section class="practice-section"
+                 role="dialog"
+                 aria-modal="true"
+                 aria-labelledby="practiceTitle">
+
+            <button type="button"
+                    class="close-modal"
+                    id="closePracticeButton"
+                    aria-label="Close practice room">
+                &times;
+            </button>
+
+            <h2 id="practiceTitle">Interview Practice Room</h2>
+
+            <p class="practice-intro">
+                Choose a topic and practise open-ended questions, coding tasks,
+                debugging, complexity analysis and real-world scenarios.
+                Use Next Question to keep practising.
+            </p>
+
+            <label class="form-label" for="topicSelect">
+                Select Interview Topic
+            </label>
+
+            <select id="topicSelect">
+                <option value="HR">HR Interview</option>
+                <option value="Python">Python</option>
+                <option value="DSA">Data Structures &amp; Algorithms</option>
+                <option value="DBMS">DBMS &amp; SQL</option>
+                <option value="Java">Java</option>
+                <option value="Communication">Communication Skills</option>
+                <option value="AI">AI &amp; Machine Learning</option>
+            </select>
+
+            <div class="question-box">
+
+                <div class="question-label">
+                    YOUR INTERVIEW QUESTION
+                </div>
+
+                <div class="question-text" id="questionText">
+                    Tell me about yourself.
+                </div>
+
+                <span class="question-count" id="questionCount">
+                    Question 1
+                </span>
+
+            </div>
+
+            <label class="form-label" for="answerText">
+                Write Your Answer
+            </label>
+
+            <textarea id="answerText"
+                      placeholder="Type your answer here..."></textarea>
+
+            <div class="practice-buttons">
+
+                <button type="button"
+                        class="button"
+                        id="reviewButton">
+                    Review My Answer
+                </button>
+
+                <button type="button"
+                        class="button button-grey"
+                        id="previousButton"
+                        disabled>
+                    ← Previous Question
+                </button>
+
+                <button type="button"
+                        class="button button-grey"
+                        id="nextButton">
+                    Next Question →
+                </button>
+
+                <button type="button"
+                        class="button button-grey"
+                        id="clearButton">
+                    Clear Answer
+                </button>
+
+            </div>
+
+            <div class="feedback"
+                 id="feedbackBox"
+                 aria-live="polite">
+
+                <h3>Your Answer Review</h3>
+                <div id="feedbackContent"></div>
+
+            </div>
+
+            <p class="note">
+                Questions are generated dynamically in your browser. The answer review
+                is a writing checklist, not an AI score or correctness check.
+            </p>
+
+        </section>
+
+    </div>
+
+    <!-- FOOTER -->
+
+    <footer>
+        <p>CareerFlix</p>
+        <p>Explore • Practise • Grow</p>
+        <p>© 2026 CareerFlix. Your future, your story.</p>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+/* CareerFlix question engine: open-ended, practical and dynamically generated. */
+const questionBank = {
+  HR: {
+    concept: ["Tell me about yourself.", "What are your strengths and what skill are you currently improving?", "Why are you interested in this role?", "What does teamwork mean to you?", "How do you prioritise tasks when several deadlines overlap?", "Describe a goal you set and how you worked towards it."],
+    scenario: ["A teammate is not completing their part of a group task. How would you handle it?", "You receive critical feedback on your work. What would you do next?", "You are assigned a task you have never done before. How would you approach it?", "Two urgent tasks arrive at the same time. Explain how you would decide what to do first."],
+    explain: ["Explain a project or activity you are proud of.", "Describe a challenge you faced and the steps you took to solve it.", "What kind of work environment helps you learn effectively?", "What would you like to learn in your first three months in this role?"]
+  },
+  Python: {
+    concept: ["Explain Python's list, tuple, set and dictionary with suitable use cases.", "What is the difference between == and is in Python?", "Explain mutable and immutable objects.", "How does exception handling work in Python?", "What are decorators and where might you use them?", "Explain generators and the yield keyword.", "What is the difference between shallow copy and deep copy?", "Explain list comprehension and give a practical example."],
+    compare: ["Compare a list and a tuple. When would you choose each?", "Compare a Python list with a NumPy array.", "Differentiate between an iterator and an iterable.", "Compare multiprocessing and multithreading in Python."],
+    coding: ["Write a Python function to check whether a string is a palindrome. Explain its time complexity.", "Write a function to find the second-largest distinct number in a list.", "Given a list of integers, return the frequency of each value without using an external library.", "Write a function that removes duplicates while preserving the original order.", "Create a function to check whether two strings are anagrams."],
+    debug: ["A function unexpectedly changes a list passed to it. Explain why this can happen and how you would avoid it.", "A loop skips some items while removing elements from a list. Diagnose the issue and suggest a safe approach.", "A dictionary lookup raises a KeyError. Explain two ways to handle this safely."],
+    scenario: ["You need to process a file that is too large to load fully into memory. How would you design the solution?", "An API sometimes returns missing fields. How would you make your Python code robust?"]
+  },
+  DSA: {
+    concept: ["Explain how an array is stored and accessed in memory.", "What is a linked list? Explain its common variants.", "Explain stack and queue with real-world use cases.", "What is a hash table and how are collisions handled?", "Explain recursion and the role of a base case.", "What is a binary search tree? Explain its ordering property.", "Explain heap data structure and its applications.", "What is graph traversal? Compare BFS and DFS.", "Explain a trie and where it is useful.", "What is dynamic programming and how is it different from plain recursion?", "Explain greedy algorithms and when they work.", "What is a disjoint-set union structure?", "Explain stable and unstable sorting algorithms.", "What is a circular queue and why is it useful?", "Explain the difference between a tree and a graph."],
+    compare: ["Compare arrays and linked lists for insertion, deletion and random access.", "Compare stack and queue operations and their use cases.", "Compare BFS and DFS in terms of traversal strategy and memory usage.", "Compare merge sort and quick sort.", "Compare a binary search tree and a heap.", "Compare adjacency matrix and adjacency list graph representations.", "Compare linear search and binary search, including their prerequisites.", "Compare recursion and iteration."],
+    coding: ["Write language-independent steps or code to reverse a singly linked list.", "Given an array, find two values whose sum equals a target. Explain your approach.", "Implement a stack using an array and describe overflow handling.", "Implement a queue using two stacks.", "Find the middle node of a linked list in one traversal.", "Detect whether a linked list contains a cycle.", "Merge two sorted arrays into one sorted result.", "Find the first non-repeating character in a string.", "Perform level-order traversal of a binary tree.", "Find the maximum depth of a binary tree.", "Return the number of connected components in an undirected graph.", "Explain how you would find the shortest path in an unweighted graph.", "Write an algorithm to check balanced parentheses.", "Find the maximum subarray sum and explain the approach.", "Design an algorithm to remove duplicates from a sorted array."],
+    debug: ["A binary search implementation sometimes misses a value at the boundary. What common boundary mistakes would you inspect?", "A recursive tree traversal causes a stack overflow on a very deep input. Explain possible fixes.", "A hash table's performance becomes poor when many keys collide. What could be happening?", "A sorting function works for positive numbers but fails with negative values. How would you investigate it?"],
+    complexity: ["Analyse the time and space complexity of reversing a linked list.", "What is the average and worst-case complexity of hash table lookup, and why do they differ?", "Derive the time complexity of binary search.", "Analyse the complexity of BFS using an adjacency list.", "Compare the time and auxiliary-space complexity of merge sort and quick sort.", "What is amortised analysis? Explain it using dynamic-array insertion."],
+    scenario: ["You must process millions of records and repeatedly check whether an ID has appeared before. Which data structure would you choose and why?", "A system needs undo and redo functionality. Design a suitable data-structure approach.", "You need to find the shortest route between locations in an unweighted network. Which algorithm would you use?", "A leaderboard must repeatedly return the highest-scoring item as scores change. Which data structure could help?", "A text editor needs fast insertion and deletion near the cursor. Discuss suitable structures."]
+  },
+  DBMS: {
+    concept: ["What is database normalisation? Explain 1NF, 2NF and 3NF.", "Explain primary key, foreign key and candidate key.", "What are ACID properties?", "Explain database indexing and its trade-offs.", "What is a transaction and how is it committed or rolled back?", "Explain the purpose of database constraints."],
+    compare: ["Compare DELETE, TRUNCATE and DROP.", "Compare INNER JOIN and LEFT JOIN.", "Compare clustered and non-clustered indexes.", "Compare SQL and NoSQL databases."],
+    coding: ["Write an SQL query to find the second-highest salary in an Employee table.", "Write an SQL query to count employees in each department.", "Write an SQL query to find duplicate email addresses.", "Write an SQL query to join Customers and Orders and show each customer's order count."],
+    scenario: ["A report query becomes slow as a table grows. How would you investigate and improve it?", "Two users update the same record at nearly the same time. What database issues could occur?"]
+  },
+  Java: {
+    concept: ["Explain the four pillars of object-oriented programming.", "What is the difference between JDK, JRE and JVM?", "Explain method overloading and overriding.", "What is an interface and how is it different from an abstract class?", "Explain exception handling in Java.", "What are collections in Java?", "Explain the purpose of garbage collection."],
+    compare: ["Compare == and equals() in Java.", "Compare ArrayList and LinkedList.", "Compare an interface and an abstract class.", "Compare checked and unchecked exceptions."],
+    coding: ["Write a Java method to reverse a string without using a built-in reverse method.", "Write a program to find the frequency of each character in a string.", "Create a class that demonstrates encapsulation.", "Write a method to check whether a number is prime."],
+    scenario: ["A Java application uses more memory over time. What would you investigate?", "You need a collection that stores unique elements and supports fast lookup. Which option would you consider and why?"]
+  },
+  Communication: {
+    concept: ["How do you explain a technical concept to someone without a technical background?", "What makes a presentation clear and engaging?", "How do you make sure you have understood a task correctly?"],
+    scenario: ["A teammate disagrees with your approach during a meeting. How would you respond?", "You notice that a client has misunderstood an important update. How would you clarify it?", "You have to present an unexpected project delay. How would you communicate it?"],
+    explain: ["Describe a time you collaborated with others to complete a task.", "How do you respond when someone gives you constructive feedback?", "Explain how you would communicate progress during a long project."]
+  },
+  AI: {
+    concept: ["Explain the difference between artificial intelligence, machine learning and deep learning.", "What is supervised learning? Give examples.", "Explain overfitting and underfitting.", "What is the purpose of a validation dataset?", "Explain precision, recall and F1-score.", "What is feature engineering?", "Explain the difference between classification and regression.", "What is a confusion matrix?"],
+    compare: ["Compare supervised and unsupervised learning.", "Compare classification and regression.", "Compare bagging and boosting.", "Compare precision and recall and explain when each matters more."],
+    scenario: ["Your model performs well on training data but poorly on unseen data. How would you investigate?", "Your dataset has many missing values. How would you decide how to handle them?", "A classification dataset is highly imbalanced. What evaluation and training strategies could you use?"],
+    explain: ["Describe the main stages of a machine-learning project, from data collection to evaluation.", "Explain why data leakage can make model evaluation misleading."]
+  }
+};
+
+const topicLabels = {HR:"HR Interview", Python:"Python", DSA:"Data Structures & Algorithms", DBMS:"DBMS & SQL", Java:"Java", Communication:"Communication Skills", AI:"AI & Machine Learning"};
+let questionIndex = 0;
+let currentQuestion = null;
+// Keeps earlier questions and their unsent answers while this practice session is open.
+let questionHistory = [];
+let previousFocus = null;
+let seenQuestions = new Set();
+const modal = document.getElementById("practiceModal");
+const topicSelect = document.getElementById("topicSelect");
+const questionText = document.getElementById("questionText");
+const questionCount = document.getElementById("questionCount");
+const answerText = document.getElementById("answerText");
+const feedbackBox = document.getElementById("feedbackBox");
+const feedbackContent = document.getElementById("feedbackContent");
+
+function makeQuestion(topic) {
+  const bank = questionBank[topic] || questionBank.HR;
+  const types = Object.keys(bank);
+  // Try unseen prompts first. When a bank is exhausted, create fresh variants.
+  for (let attempt = 0; attempt < 80; attempt++) {
+    const type = types[Math.floor(Math.random() * types.length)];
+    const pool = bank[type];
+    const base = pool[Math.floor(Math.random() * pool.length)];
+    const level = ["Foundation", "Intermediate", "Advanced"][Math.floor(Math.random() * 3)];
+    const extensions = {
+      Foundation: "Start with a clear definition and one simple example.",
+      Intermediate: "Explain your reasoning step by step and include a practical example or edge case.",
+      Advanced: "Discuss trade-offs, limitations, edge cases and how you would improve the approach."
+    };
+    const text = base + "\n\n" + extensions[level];
+    const key = topic + "|" + type + "|" + text;
+    if (!seenQuestions.has(key)) {
+      seenQuestions.add(key);
+      return {text: text, type: type, level: level, key: key};
+    }
+  }
+  const type = types[questionIndex % types.length];
+  const base = bank[type][questionIndex % bank[type].length];
+  const followups = ["Give a real-world example.", "Explain your approach step by step.", "Discuss edge cases and trade-offs.", "How would you test your solution?"];
+  const text = base + "\n\nFollow-up: " + followups[questionIndex % followups.length];
+  return {text, type, level:"Challenge", key:topic+"|"+questionIndex+"|"+text};
+}
+
+function updatePreviousButton() {
+  const button = document.getElementById("previousButton");
+  button.disabled = questionHistory.length === 0;
+  button.style.opacity = button.disabled ? "0.55" : "1";
+  button.style.cursor = button.disabled ? "not-allowed" : "pointer";
+}
+function showQuestion() {
+  currentQuestion = makeQuestion(topicSelect.value);
+  questionText.textContent = currentQuestion.text;
+  questionCount.textContent = "Question " + questionIndex + " · " + currentQuestion.type.toUpperCase() + " · " + currentQuestion.level;
+  feedbackBox.style.display = "none";
+  feedbackContent.replaceChildren();
+  updatePreviousButton();
+}
+function openPracticeModal(topic) {
+  previousFocus = document.activeElement;
+  if (topic && questionBank[topic]) topicSelect.value = topic;
+  questionIndex = 1;
+  questionHistory = [];
+  answerText.value = "";
+  showQuestion();
+  modal.classList.add("open");
+  modal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
+  document.getElementById("closePracticeButton").focus();
+}
+function closePracticeModal() {
+  modal.classList.remove("open");
+  modal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
+  if (previousFocus && typeof previousFocus.focus === "function") previousFocus.focus();
+}
+
+document.querySelectorAll(".poster[data-topic]").forEach(card => {
+  card.addEventListener("click", () => openPracticeModal(card.dataset.topic));
+  card.addEventListener("keydown", event => {
+    if (event.key === "Enter" || event.key === " ") { event.preventDefault(); openPracticeModal(card.dataset.topic); }
+  });
+});
+document.getElementById("startPracticeButton").addEventListener("click", () => openPracticeModal(topicSelect.value));
+document.getElementById("closePracticeButton").addEventListener("click", closePracticeModal);
+modal.addEventListener("click", event => { if (event.target === modal) closePracticeModal(); });
+document.addEventListener("keydown", event => { if (event.key === "Escape" && modal.classList.contains("open")) closePracticeModal(); });
+topicSelect.addEventListener("change", () => { questionIndex = 1; questionHistory = []; answerText.value = ""; showQuestion(); });
+document.getElementById("nextButton").addEventListener("click", () => {
+  // Preserve the current question and draft answer so Previous can restore them.
+  if (currentQuestion) {
+    questionHistory.push({question: currentQuestion, answer: answerText.value});
+  }
+  questionIndex++;
+  answerText.value = "";
+  showQuestion();
+});
+document.getElementById("previousButton").addEventListener("click", () => {
+  if (!questionHistory.length) return;
+  const previous = questionHistory.pop();
+  currentQuestion = previous.question;
+  questionIndex = Math.max(1, questionIndex - 1);
+  questionText.textContent = currentQuestion.text;
+  questionCount.textContent = "Question " + questionIndex + " · " + currentQuestion.type.toUpperCase() + " · " + currentQuestion.level;
+  answerText.value = previous.answer;
+  feedbackBox.style.display = "none";
+  feedbackContent.replaceChildren();
+  updatePreviousButton();
+});
+document.getElementById("clearButton").addEventListener("click", () => { answerText.value = ""; feedbackBox.style.display = "none"; feedbackContent.replaceChildren(); answerText.focus(); });
+const PRACTICE_KEY = "careerflix_practice_history_v2";
+function readPracticeHistory() {
+  try { return JSON.parse(localStorage.getItem(PRACTICE_KEY) || "[]"); }
+  catch (error) { return []; }
+}
+function savePracticeRecord(record) {
+  const history = readPracticeHistory();
+  history.unshift(record);
+  // Keep the latest 500 reviewed answers in this browser.
+  try { localStorage.setItem(PRACTICE_KEY, JSON.stringify(history.slice(0, 500))); }
+  catch (error) { alert("Browser storage is full. Please clear some browser data and try again."); }
+}
+function buildAnswerSuggestions(answer, words) {
+  const suggestions = [];
+  const lower = answer.toLowerCase();
+  if (words.length < 25) suggestions.push("Add more detail: explain the idea step by step and include a relevant example.");
+  else if (words.length > 220) suggestions.push("Make this more concise. Use short paragraphs or 3–5 clear bullet points.");
+  else suggestions.push("Your answer has a useful length. Make sure every sentence directly answers the question.");
+  if (!/[.!?]/.test(answer)) suggestions.push("Use complete sentences and punctuation so your explanation is easier to follow.");
+  if (!/for example|example|such as|e.g./i.test(answer)) suggestions.push("Add one practical example, small input/output, or real situation to make the answer clearer.");
+  if (!/because|therefore|so that|this means|as a result/i.test(answer)) suggestions.push("Explain WHY the concept or approach works, not only WHAT it is.");
+  if (topicSelect.value === "DSA" || currentQuestion.type === "coding" || currentQuestion.type === "complexity") {
+    if (!/approach|step|algorithm|iterate|traverse|recursion|hash/i.test(lower)) suggestions.push("State your algorithm or approach in numbered steps before writing code.");
+    if (!/time complexity|o\(1\)|o\(n\)|o\(log n\)|o\(n log n\)|o\(n²\)|o\(n\^2\)/i.test(lower)) suggestions.push("Mention time complexity and explain what input size it depends on.");
+    if (!/space complexity|auxiliary space|extra space/i.test(lower)) suggestions.push("Mention space complexity, including any extra data structure you use.");
+    if (!/edge case|empty|duplicate|null|single element|boundary/i.test(lower)) suggestions.push("Test edge cases such as empty input, one item, duplicates and boundary values.");
+  } else if (topicSelect.value === "HR" || topicSelect.value === "Communication") {
+    ["situation", "task", "action", "result"].forEach(word => {
+      if (!lower.includes(word)) suggestions.push("For experience-based questions, use the STAR structure: Situation, Task, Action and Result. Make your own action and outcome clear.");
+    });
+    if (!/I |my |we /i.test(answer)) suggestions.push("Use a specific first-person example and clarify your own contribution.");
+  } else {
+    if (!/definition|means|refers to|is a/i.test(lower)) suggestions.push("Begin with a one-sentence definition before adding details.");
+    if (!/advantage|disadvantage|trade.off|limitation|when to use/i.test(lower)) suggestions.push("Where relevant, add one advantage, limitation or situation in which this concept is useful.");
+  }
+  if (suggestions.length === 0) suggestions.push("Good structure detected by the checklist. Review technical accuracy and practise explaining it without reading.");
+  return [...new Set(suggestions)];
+}
+document.getElementById("reviewButton").addEventListener("click", () => {
+  const answer = answerText.value.trim();
+  if (!answer) { alert("Please write your answer before reviewing it."); answerText.focus(); return; }
+  const words = answer.split(/\s+/).filter(Boolean);
+  const suggestions = buildAnswerSuggestions(answer, words);
+  const record = {
+    id: Date.now(), topic: topicSelect.value, topicLabel: topicLabels[topicSelect.value] || topicSelect.value,
+    question: currentQuestion ? currentQuestion.text : questionText.textContent,
+    type: currentQuestion ? currentQuestion.type : "practice", level: currentQuestion ? currentQuestion.level : "Practice",
+    answer: answer, wordCount: words.length, suggestions: suggestions,
+    reviewedAt: new Date().toLocaleString()
+  };
+  savePracticeRecord(record);
+  feedbackContent.replaceChildren();
+  const count = document.createElement("p"); count.textContent = "Word count: " + words.length + " · Saved to your practice history ✓"; feedbackContent.appendChild(count);
+  const heading = document.createElement("p"); heading.textContent = "Suggestions to improve your answer:"; feedbackContent.appendChild(heading);
+  const list = document.createElement("ul");
+  suggestions.forEach(suggestion => { const item = document.createElement("li"); item.textContent = suggestion; list.appendChild(item); });
+  feedbackContent.appendChild(list);
+  const note = document.createElement("p"); note.textContent = "Note: These are writing and structure suggestions, not an AI check of whether every technical fact is correct."; feedbackContent.appendChild(note);
+  feedbackBox.style.display = "block";
+  feedbackBox.scrollIntoView({behavior:"smooth", block:"nearest"});
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Progress Dashboard | CareerFlix AI</title>
+<style>
+:root{--bg:#080808;--panel:#171717;--panel2:#202020;--line:#303030;--red:#e50914;--muted:#aaa;--white:#fff;--green:#42c98a}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--white);font-family:Arial,Helvetica,sans-serif;line-height:1.55}
+.navbar{min-height:76px;padding:16px 5%;display:flex;align-items:center;justify-content:space-between;gap:20px;background:#050505;border-bottom:1px solid #252525}
+.logo{font-size:28px;font-weight:800;letter-spacing:-.7px}.logo span{color:var(--red)}.ai{font-size:11px;background:#292929;color:#ddd;padding:4px 7px;border-radius:5px;margin-left:5px}
+.nav-links{display:flex;gap:24px;flex-wrap:wrap}.nav-links a{color:#ddd;text-decoration:none;font-size:14px}.nav-links a:hover,.nav-links a.active{color:#ff4b55}
+.container{width:min(1180px,90%);margin:0 auto;padding:42px 0 70px}
+.eyebrow{font-size:12px;letter-spacing:2px;color:#ff5962;font-weight:bold;text-transform:uppercase}
+h1{font-size:clamp(32px,5vw,46px);line-height:1.15;margin:8px 0 10px}h1 span{color:var(--red)}
+.subtitle{color:var(--muted);max-width:720px;margin-bottom:28px}
+.welcome{background:linear-gradient(115deg,#211012,#171717 60%,#202020);border:1px solid #432326;border-radius:16px;padding:27px;margin-bottom:22px}
+.welcome h2{font-size:21px;margin-bottom:5px}.welcome p{color:#c8c8c8}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:22px}
+.stat,.panel{background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:21px}
+.stat-icon{font-size:24px;margin-bottom:9px}.stat-label{color:var(--muted);font-size:13px}.stat-value{font-size:30px;font-weight:750;margin-top:4px}.stat-note{font-size:12px;color:#888;margin-top:3px}
+.columns{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+.panel h2{font-size:19px;margin-bottom:5px}.panel-intro{color:var(--muted);font-size:13px;margin-bottom:20px}
+.overview{display:flex;align-items:center;gap:24px}.ring{--value:0;width:142px;height:142px;flex:none;border-radius:50%;background:conic-gradient(var(--red) calc(var(--value)*1%),#333 0);display:grid;place-items:center}
+.ring-inner{width:112px;height:112px;border-radius:50%;background:var(--panel);display:flex;flex-direction:column;align-items:center;justify-content:center}.ring-inner strong{font-size:28px}.ring-inner span{font-size:11px;color:var(--muted)}
+.overview-copy{color:#c8c8c8;font-size:14px}.overview-copy strong{color:white}
+.skill-row{margin:17px 0}.skill-head{display:flex;justify-content:space-between;gap:12px;font-size:14px;margin-bottom:7px}.skill-head span:last-child{color:#ff6870;font-weight:bold}
+.track{height:9px;background:#333;border-radius:20px;overflow:hidden}.track span{height:100%;display:block;background:linear-gradient(90deg,#b80712,var(--red));border-radius:20px}
+.empty{padding:18px;border:1px dashed #444;border-radius:9px;color:#aaa;font-size:14px}
+.history-list{list-style:none}.history-list li{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #303030;font-size:14px}.history-list li:last-child{border:0}.score{color:var(--green);font-weight:bold}
+.recommendation{background:#201719;border-color:#4a292c}.recommendation p{color:#ccc;font-size:14px;margin:10px 0 17px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.btn{display:inline-block;text-decoration:none;border:0;border-radius:7px;padding:11px 17px;background:var(--red);color:white;font-weight:bold;font-size:13px;cursor:pointer}.btn.secondary{background:#333}.btn:hover{filter:brightness(1.15)}
+.task-list{display:grid;gap:10px}.task{display:flex;align-items:flex-start;gap:11px;padding:11px;background:#202020;border-radius:8px;color:#ddd;font-size:14px}.task input{accent-color:var(--red);width:17px;height:17px;margin-top:2px}.task.done span{text-decoration:line-through;color:#888}
+.task-progress{height:7px;background:#333;border-radius:20px;overflow:hidden;margin:12px 0 16px}.task-progress span{display:block;height:100%;width:0;background:var(--red);transition:width .2s}
+footer{text-align:center;border-top:1px solid #252525;color:#777;padding:22px;font-size:12px}
+@media(max-width:850px){.stats{grid-template-columns:repeat(2,1fr)}.columns{grid-template-columns:1fr}}
+@media(max-width:560px){.navbar{align-items:flex-start;flex-direction:column}.nav-links{gap:14px}.container{width:92%;padding-top:30px}.stats{gap:10px}.stat{padding:15px}.stat-value{font-size:25px}.overview{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body>
+<header class="navbar">
+  <div class="logo">Career<span>Flix</span><small class="ai">AI</small></div>
+  <nav class="nav-links" aria-label="Main navigation">
+    <a href="/">Home</a><a href="/resume">Resume</a><a href="/interview">Interview</a><a class="active" href="/progress">Progress</a><a href="/jobs">Jobs</a>
+  </nav>
+</header>
+<main class="container">
+  <div class="eyebrow">Your learning journey</div>
+  <h1>Progress <span>Dashboard</span></h1>
+  <p class="subtitle">Keep track of your preparation, build consistent habits and see what to work on next.</p>
+
+  <section class="welcome">
+    <h2>Every step counts. Keep moving forward!</h2>
+    <p>Your dashboard will show interview results when interview scoring is connected. Use the weekly checklist below to track your own preparation in the meantime.</p>
+  </section>
+
+  <section class="stats" aria-label="Progress summary">
+    <article class="stat"><div class="stat-icon">🎯</div><div class="stat-label">Answers reviewed</div><div class="stat-value" id="savedAnswersCount">0</div><div class="stat-note">Saved practice attempts</div></article>
+    <article class="stat"><div class="stat-icon">📚</div><div class="stat-label">Topics practised</div><div class="stat-value" id="topicsPractisedCount">0</div><div class="stat-note">Unique practice categories</div></article>
+    <article class="stat"><div class="stat-icon">❓</div><div class="stat-label">Total words written</div><div class="stat-value" id="totalWordsCount">0</div><div class="stat-note">Across reviewed answers</div></article>
+    <article class="stat"><div class="stat-icon">🗓️</div><div class="stat-label">Latest practice</div><div class="stat-value" id="latestPracticeDate" style="font-size:17px">Not yet</div><div class="stat-note">Most recent saved attempt</div></article>
+  </section>
+
+  <section class="panel" style="margin-bottom:18px">
+    <h2>📝 Your saved practice history</h2>
+    <p class="panel-intro">Every answer you review on the Interview page appears here with its improvement tips.</p>
+    <div id="practiceHistoryList" class="history-list"><div class="empty">No answers saved yet. Go to Interview, answer a question and click “Review My Answer”.</div></div>
+    <div class="actions"><button class="btn secondary" id="clearPracticeHistory" type="button">Clear saved practice history</button></div>
+  </section>
+
+  <section class="columns">
+    <article class="panel">
+      <h2>📊 Overall performance</h2><p class="panel-intro">Your average score from completed interviews.</p>
+      <div class="overview">
+        <div class="ring" style="--value:{{ overall }}"><div class="ring-inner"><strong>{{ overall }}%</strong><span>Overall score</span></div></div>
+        <div class="overview-copy">
+          {% if interviews == 0 %}<strong>Your journey starts here.</strong><br>No interview scores have been recorded yet. Complete a practice session to begin building your performance history.
+          {% elif overall >= 80 %}<strong>Excellent progress!</strong><br>Keep challenging yourself with advanced questions and clear explanations.
+          {% elif overall >= 60 %}<strong>Good progress!</strong><br>Keep practising regularly and focus on the topics where you lose marks.
+          {% else %}<strong>Keep building your skills.</strong><br>Revise the fundamentals, practise explaining concepts and try another mock interview.
+          {% endif %}
+        </div>
+      </div>
+      <div class="actions"><a class="btn" href="/interview">Practice interview →</a></div>
+    </article>
+
+    <article class="panel">
+      <h2>🧠 Skill development</h2><p class="panel-intro">Suggested areas to practise. These are learning targets, not measured test scores.</p>
+      {% for skill in skill_areas %}
+      <div class="skill-row"><div class="skill-head"><span>{{ skill }}</span><span>Practice area</span></div><div class="track"><span style="width:100%;opacity:.28"></span></div></div>
+      {% endfor %}
+    </article>
+  </section>
+
+  <section class="columns">
+    <article class="panel">
+      <h2>📋 Interview history</h2><p class="panel-intro">Your recorded practice results will appear here.</p>
+      {% if scores %}
+      <ul class="history-list">
+        {% for score in scores|reverse %}
+        <li><span>Interview {{ loop.index }}</span><span class="score">{{ "%.0f"|format(score) }}%</span></li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <div class="empty">No interview attempts recorded yet.<br>Once your interview module saves scores, they will be listed here automatically.</div>
+      {% endif %}
+    </article>
+    <article class="panel recommendation">
+      <h2>💡 Your next step</h2>
+      {% if overall >= 80 and interviews > 0 %}
+      <p>Your recorded results are strong. Try advanced technical questions, timed coding practice and company-specific preparation.</p>
+      {% elif overall >= 60 and interviews > 0 %}
+      <p>Review the questions you found difficult. Practise explaining your projects, core concepts and problem-solving approach.</p>
+      {% else %}
+      <p>Start with the fundamentals. Choose one topic, revise it, solve a few practice questions and explain the solution in your own words.</p>
+      {% endif %}
+      <div class="actions"><a class="btn" href="/interview">Start practice →</a><a class="btn secondary" href="/resume">Review resume</a></div>
+    </article>
+  </section>
+
+  <section class="panel">
+    <h2>✅ Weekly preparation checklist</h2>
+    <p class="panel-intro">Tick tasks as you complete them. Your checklist progress is saved in this browser.</p>
+    <div class="task-progress"><span id="taskBar"></span></div>
+    <p id="taskCount" class="panel-intro" aria-live="polite">0 of 5 tasks completed</p>
+    <div class="task-list" id="taskList">
+      <label class="task"><input type="checkbox" data-task="revise"><span>Revise one programming concept (Python / Java / C++)</span></label>
+      <label class="task"><input type="checkbox" data-task="dsa"><span>Solve at least three Data Structures questions</span></label>
+      <label class="task"><input type="checkbox" data-task="sql"><span>Practise SQL queries and DBMS concepts</span></label>
+      <label class="task"><input type="checkbox" data-task="project"><span>Improve or document one resume project</span></label>
+      <label class="task"><input type="checkbox" data-task="mock"><span>Complete one mock interview practice</span></label>
+    </div>
+    <div class="actions"><button class="btn secondary" id="resetTasks" type="button">Reset checklist</button></div>
+  </section>
+</main>
+<footer>CareerFlix AI · Keep learning, keep improving.</footer>
+<script>
+(function(){
+ const practiceKey='careerflix_practice_history_v2';
+ const historyBox=document.getElementById('practiceHistoryList');
+ function getHistory(){try{return JSON.parse(localStorage.getItem(practiceKey)||'[]')}catch(e){return []}}
+ function renderPracticeHistory(){
+   const history=getHistory();
+   document.getElementById('savedAnswersCount').textContent=history.length;
+   document.getElementById('topicsPractisedCount').textContent=new Set(history.map(x=>x.topic)).size;
+   document.getElementById('totalWordsCount').textContent=history.reduce((n,x)=>n+(Number(x.wordCount)||0),0).toLocaleString();
+   document.getElementById('latestPracticeDate').textContent=history.length?(history[0].reviewedAt||'Saved'):'Not yet';
+   historyBox.replaceChildren();
+   if(!history.length){const empty=document.createElement('div');empty.className='empty';empty.textContent='No answers saved yet. Go to Interview, answer a question and click “Review My Answer”.';historyBox.appendChild(empty);return;}
+   history.slice(0,30).forEach((item,index)=>{
+     const li=document.createElement('div');li.style.padding='14px 0';li.style.borderBottom='1px solid #303030';
+     const title=document.createElement('strong');title.textContent=(item.topicLabel||item.topic||'Practice')+' · '+(item.type||'').toUpperCase();
+     const date=document.createElement('div');date.style.color='#999';date.style.fontSize='12px';date.textContent=item.reviewedAt||'';
+     const question=document.createElement('p');question.style.margin='7px 0';question.textContent='Q: '+(item.question||'');
+     const answer=document.createElement('p');answer.style.color='#ccc';answer.style.fontSize='13px';answer.textContent='Your answer: '+(item.answer||'').slice(0,260)+((item.answer||'').length>260?'…':'');
+     const tips=document.createElement('p');tips.style.color='#ff9da2';tips.style.fontSize='13px';tips.textContent='Next improvement: '+((item.suggestions||[])[0]||'Review your answer for clarity.');
+     li.append(title,date,question,answer,tips);historyBox.appendChild(li);
+   });
+   if(history.length>30){const more=document.createElement('p');more.className='panel-intro';more.textContent='Showing latest 30 of '+history.length+' saved answers.';historyBox.appendChild(more);}
+ }
+ document.getElementById('clearPracticeHistory').addEventListener('click',()=>{if(confirm('Delete all saved interview practice answers from this browser?')){localStorage.removeItem(practiceKey);renderPracticeHistory();}});
+ renderPracticeHistory();
+ const key='careerflix_progress_tasks_v1';
+ const boxes=[...document.querySelectorAll('[data-task]')];
+ const bar=document.getElementById('taskBar');
+ const count=document.getElementById('taskCount');
+ function read(){try{return JSON.parse(localStorage.getItem(key)||'{}')}catch(e){return {}}}
+ function update(){
+   const done=boxes.filter(b=>b.checked).length;
+   const pct=boxes.length?Math.round(done/boxes.length*100):0;
+   bar.style.width=pct+'%';
+   count.textContent=done+' of '+boxes.length+' tasks completed · '+pct+'%';
+   boxes.forEach(b=>b.closest('.task').classList.toggle('done',b.checked));
+   const state={};boxes.forEach(b=>state[b.dataset.task]=b.checked);
+   try{localStorage.setItem(key,JSON.stringify(state))}catch(e){}
+ }
+ const saved=read();boxes.forEach(b=>{b.checked=!!saved[b.dataset.task];b.addEventListener('change',update)});
+ document.getElementById('resetTasks').addEventListener('click',()=>{boxes.forEach(b=>b.checked=false);update()});
+ update();
+})();
+</script>
+</body>
+</html>
